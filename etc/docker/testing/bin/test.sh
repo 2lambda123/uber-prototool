@@ -32,14 +32,13 @@ check_command_output_file() {
   trap 'rm -rf "${tmp_file1}"' EXIT
   trap 'rm -rf "${tmp_file2}"' EXIT
   echo "Checking that '${*:2}' results in the contents of '${1}'"
-  cat "${1}" | sort > "$tmp_file1"
-  "${@:2}" | sort > "$tmp_file2"
+  cat "${1}" | sort >"$tmp_file1"
+  "${@:2}" | sort >"$tmp_file2"
   if ! diff "$tmp_file1" "$tmp_file2"; then
     echo "Diff detected" >&2
     exit 1
   fi
 }
-
 
 check_command_success() {
   echo "Checking that '${*}' is successful"
