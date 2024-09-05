@@ -3,7 +3,7 @@
 set -euo pipefail
 
 DIR="$(cd "$(dirname "${0}")/.." && pwd)"
-cd "${DIR}"
+cd "$DIR"
 
 check_env() {
   echo "Checking that ${1}=${2}"
@@ -20,8 +20,8 @@ check_which() {
 check_command_output() {
   echo "Checking that '${*:2}' results in '${1}'"
   command_output="$("${@:2}")"
-  if [ "${command_output}" != "${1}" ]; then
-    echo "Expected: '${1}' Got: '${command_output}'" >&2
+  if [ "$command_output" != "${1}" ]; then
+    echo "Expected: '${1}' Got: '$command_output'" >&2
     exit 1
   fi
 }
@@ -32,9 +32,9 @@ check_command_output_file() {
   trap 'rm -rf "${tmp_file1}"' EXIT
   trap 'rm -rf "${tmp_file2}"' EXIT
   echo "Checking that '${*:2}' results in the contents of '${1}'"
-  cat "${1}" | sort > "${tmp_file1}"
-  "${@:2}" | sort > "${tmp_file2}"
-  if ! diff "${tmp_file1}" "${tmp_file2}"; then
+  cat "${1}" | sort > "$tmp_file1"
+  "${@:2}" | sort > "$tmp_file2"
+  if ! diff "$tmp_file1" "$tmp_file2"; then
     echo "Diff detected" >&2
     exit 1
   fi
@@ -90,7 +90,7 @@ check_which /usr/local/bin/protoc-gen-twirp
 check_which /usr/local/bin/protoc-gen-twirp_python
 check_which /usr/local/bin/protoc-gen-yarpc-go
 check_which /usr/local/bin/prototool
-check_command_success protoc -o /dev/null $(find proto -name '*.proto')
+check_command_success protoc -o /dev/null "$(find proto -name '*.proto')"
 check_command_success rm -rf gen
 check_command_success prototool compile proto
 check_command_success prototool lint proto
